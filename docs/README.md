@@ -12,6 +12,9 @@ Thư mục này gom toàn bộ tài liệu hướng dẫn và quy định của 
 
 ## Hướng dẫn kỹ thuật
 
+- [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md): lộ trình PowerShell hoàn thành bài theo trạng thái hiện tại của repo.
+- [CHECKPOINT3_GUIDE.md](CHECKPOINT3_GUIDE.md): chạy incident challenge và thu chuỗi evidence Metrics → Logs → Traces.
+- [PII_REDACTION_EVIDENCE_GUIDE.md](PII_REDACTION_EVIDENCE_GUIDE.md): gửi PII giả, kiểm tra redaction và chụp evidence 05.
 - [GUIDE.md](GUIDE.md): gỡ lỗi theo từng lớp tín hiệu.
 - [PROMPT_VERSIONING.md](PROMPT_VERSIONING.md): prompt version, label và rollback.
 - [DASHBOARD_SETUP.md](DASHBOARD_SETUP.md): dựng dashboard từ log contract.

@@ -26,6 +26,20 @@ class WindowsCliEncodingTests(unittest.TestCase):
                 )
                 self.assertEqual(completed.returncode, 0, completed.stderr.decode(errors="replace"))
 
+    def test_dashboard_does_not_crash_when_terminal_uses_cp1258(self) -> None:
+        environment = dict(os.environ)
+        environment["PYTHONIOENCODING"] = "cp1258"
+
+        completed = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "scripts" / "run_dashboard.py")],
+            cwd=REPO_ROOT,
+            env=environment,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode(errors="replace"))
+
 
 if __name__ == "__main__":
     unittest.main()
