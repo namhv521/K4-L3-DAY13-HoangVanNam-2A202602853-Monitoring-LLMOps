@@ -1,4 +1,5 @@
 service: day13-l3b-monitoring-llmops-lab
+
 primary_slo:
   name: fast_successful_requests
   window: 28d
@@ -7,7 +8,14 @@ primary_slo:
     total_event: 'event == "request_received"'
   target_percent: 99.5
   error_budget_percent: 0.5
-  note: Học viên phải giải thích hoặc điều chỉnh ngưỡng bằng baseline của mình. Ví dụ nếu có 10,000 request trong cửa sổ 28 ngày, error budget 0.5% nghĩa là tối đa 50 request được phép không đạt SLO.
+  error_budget_explanation: |
+    Với cửa sổ 28 ngày và target 99.5%, error budget là 0.5%.
+    Giả sử hệ thống xử lý trung bình 100 request/ngày = 2800 request/28 ngày.
+    Error budget = 2800 * 0.5% = 14 request được phép không đạt SLO (latency > 3000ms).
+    Khi error budget cạn (< 10% còn lại, tức < 1-2 request), cần freeze release và ưu tiên
+    điều tra nguyên nhân trước khi thêm tính năng mới.
+    Baseline lab: P95 ~1102ms (dưới ngưỡng 3000ms), nên SLO phù hợp với workload thực tế.
+
 guardrails:
   error_rate_pct_max: 2
   daily_cost_usd_max: 2.5

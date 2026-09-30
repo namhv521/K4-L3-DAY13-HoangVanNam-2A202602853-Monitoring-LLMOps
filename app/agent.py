@@ -51,7 +51,10 @@ class LabAgent:
             },
         ):
             started = time.perf_counter()
+
+            # retrieve() có @observe(as_type="span") → tạo retrieval child span tự động
             docs = retrieve(message)
+
             prompt = resolve_prompt(
                 langfuse_client,
                 feature=feature,
@@ -59,6 +62,8 @@ class LabAgent:
                 message=message,
                 enabled=tracing_enabled(),
             )
+
+            # Ghi metadata prompt lên agent span (lab-agent-run)
             langfuse_client.update_current_span(
                 metadata={
                     "doc_count": len(docs),
@@ -71,10 +76,12 @@ class LabAgent:
                 },
                 version=prompt.version,
             )
-            # TODO (CP2): instrument retrieve() and FakeLLM.generate() as child
-            # observations. The nested generation must receive prompt, usage and cost.
+
+            # propagate prompt object → Langfuse tự liên kết generation span với prompt version
+            # generate() có @observe(as_type="generation") → tạo generation child span tự động
             with propagate_attributes(prompt=prompt.managed_prompt):
                 response = self.llm.generate(prompt.text)
+
             quality_score = self._heuristic_quality(message, response.text, docs)
             latency_ms = int((time.perf_counter() - started) * 1000)
             cost_usd = self._estimate_cost(response.usage.input_tokens, response.usage.output_tokens)
